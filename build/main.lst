@@ -1,0 +1,78 @@
+   1              		.arch armv7-a
+   2              		.eabi_attribute 27, 3
+   3              		.eabi_attribute 28, 1
+   4              		.fpu neon-vfpv4
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.file	"main.c"
+  15              		.data
+  16              		.align	2
+  19              	gpio:
+  20 0000 0000203F 		.word	1059061760
+  21              		.text
+  22              		.align	2
+  23              		.global	delay
+  25              	delay:
+  26              		@ args = 0, pretend = 0, frame = 16
+  27              		@ frame_needed = 1, uses_anonymous_args = 0
+  28              		@ link register save eliminated.
+  29 0000 04B02DE5 		str	fp, [sp, #-4]!
+  30 0004 00B08DE2 		add	fp, sp, #0
+  31 0008 14D04DE2 		sub	sp, sp, #20
+  32 000c 10000BE5 		str	r0, [fp, #-16]
+  33 0010 0030A0E3 		mov	r3, #0
+  34 0014 08300BE5 		str	r3, [fp, #-8]
+  35 0018 020000EA 		b	.L2
+  36              	.L3:
+  37 001c 08301BE5 		ldr	r3, [fp, #-8]
+  38 0020 013083E2 		add	r3, r3, #1
+  39 0024 08300BE5 		str	r3, [fp, #-8]
+  40              	.L2:
+  41 0028 08201BE5 		ldr	r2, [fp, #-8]
+  42 002c 10301BE5 		ldr	r3, [fp, #-16]
+  43 0030 030052E1 		cmp	r2, r3
+  44 0034 F8FFFF9A 		bls	.L3
+  45 0038 00D08BE2 		add	sp, fp, #0
+  46 003c 0008BDE8 		ldmfd	sp!, {fp}
+  47 0040 1EFF2FE1 		bx	lr
+  49              		.align	2
+  50              		.global	main
+  52              	main:
+  53              		@ args = 0, pretend = 0, frame = 0
+  54              		@ frame_needed = 1, uses_anonymous_args = 0
+  55 0044 00482DE9 		stmfd	sp!, {fp, lr}
+  56 0048 04B08DE2 		add	fp, sp, #4
+  57 004c 003000E3 		movw	r3, #:lower16:gpio
+  58 0050 003040E3 		movt	r3, #:upper16:gpio
+  59 0054 003093E5 		ldr	r3, [r3, #0]
+  60 0058 083083E2 		add	r3, r3, #8
+  61 005c 012AA0E3 		mov	r2, #4096
+  62 0060 002083E5 		str	r2, [r3, #0]
+  63              	.L5:
+  64 0064 003000E3 		movw	r3, #:lower16:gpio
+  65 0068 003040E3 		movt	r3, #:upper16:gpio
+  66 006c 003093E5 		ldr	r3, [r3, #0]
+  67 0070 283083E2 		add	r3, r3, #40
+  68 0074 0124A0E3 		mov	r2, #16777216
+  69 0078 002083E5 		str	r2, [r3, #0]
+  70 007c A80B0CE3 		movw	r0, #52136
+  71 0080 180040E3 		movt	r0, 24
+  72 0084 FEFFFFEB 		bl	delay
+  73 0088 003000E3 		movw	r3, #:lower16:gpio
+  74 008c 003040E3 		movt	r3, #:upper16:gpio
+  75 0090 003093E5 		ldr	r3, [r3, #0]
+  76 0094 1C3083E2 		add	r3, r3, #28
+  77 0098 0124A0E3 		mov	r2, #16777216
+  78 009c 002083E5 		str	r2, [r3, #0]
+  79 00a0 A80B0CE3 		movw	r0, #52136
+  80 00a4 180040E3 		movt	r0, 24
+  81 00a8 FEFFFFEB 		bl	delay
+  82 00ac ECFFFFEA 		b	.L5
+  84              		.ident	"GCC: (GNU) 4.7.2"
