@@ -1,0 +1,31 @@
+main.c - Under the int main()
+	// Select output mode and which pin to drive
+	gpio[GPFSEL2]=0x1000;
+
+    while (1)
+    {       
+        //toggle clear register for the chosen pin. Turns it off.
+        gpio[GPCLR0]=0x1000000;
+        
+		//Apply a delay
+		delay(1625000);
+        
+        //toggle set register for the chosen pin. Turns it on.
+        gpio[GPSET0]=0x1000000;
+        
+		//Apply a delay
+		delay(1625000);
+	}
+	
+main.c - Under the delay(uint32_t count)
+	//This is just the delay for the LED. Based on the processing speed of the PI3. It just loops until a certain number. ((5.2*10^8)/(80*4)) 
+	uint32_t index = 0;
+	while(index <= count)
+	{
+		index++;
+	}
+}
+	
+Renamed the MAKEFILE to Makefile
+	# Pi 2 compile flags. Changed the optimizer in order for the delay function to work. Changed "-o2" to "-o0".
+	BASEFLAGS += -O0 -mfpu=neon-vfpv4 -mfloat-abi=hard -march=armv7-a -mtune=cortex-a7  -DPI2
